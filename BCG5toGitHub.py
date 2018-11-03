@@ -11,9 +11,7 @@ import re
 import numpy as np # required for SD calc
 import sys
 
-duration = 3600 * 7 # set for number of hours
-# duration = 60 * 1  # Set for 1 minutes
-# duration = 10
+duration = 3600 * 7 # set for number of seconds to scan (7 hours here)
 dbtoken = 'you need a DropBox Developer account and key for this';
 
 fnamebase = '/home/pi/python/'
@@ -40,7 +38,7 @@ print ('Starting time: ' + str(t) + '\n')
 fhandle.write(str(t) + '\n' )
 fhandle.write('count, heart rate, hrv, resp rate, signal, status \n')
 
-# Set up the UART serial port to the Murata BCG
+# Set up the UART serial port to talk to the Murata BCG
 
 ser = serial.Serial(
     port='/dev/ttyUSB0',\
@@ -66,6 +64,7 @@ while (count<duration):
     	hexval = line.encode('hex')
     	
     	if hexval == 'fe':
+		# 0xFE is the header for a new data frame
     		#print "----------- Start frame -------------"
     		# this all works on the prior frame that will be deleted after printing
     		
